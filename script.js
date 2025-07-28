@@ -343,6 +343,64 @@ $(document).ready(function() {
         $(this).removeClass('focused');
     });
 
+    // Background theme switcher (optional feature)
+    function changeBackgroundTheme(theme) {
+        $('.home').removeClass('theme-ocean theme-sunset theme-forest theme-cosmic');
+        if (theme) {
+            $('.home').addClass('theme-' + theme);
+        }
+    }
+
+    // Add mouse movement effect to particles
+    $(document).mousemove(function(e) {
+        const particles = $('.particle');
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        particles.each(function(index) {
+            const particle = $(this);
+            const speed = (index + 1) * 0.02;
+            const x = (mouseX * speed) % window.innerWidth;
+            const y = (mouseY * speed) % window.innerHeight;
+            
+            particle.css({
+                'transform': `translate(${x}px, ${y}px)`
+            });
+        });
+    });
+
+    // Add scroll-triggered background animation
+    $(window).scroll(function() {
+        const scrolled = $(window).scrollTop();
+        const homeHeight = $('.home').height();
+        const opacity = Math.max(0, 1 - (scrolled / homeHeight));
+        
+        $('.home::before').css('opacity', opacity);
+    });
+
+    // Add dynamic particle generation
+    function createParticle() {
+        const particle = $('<div class="particle"></div>');
+        const startX = Math.random() * window.innerWidth;
+        const startY = window.innerHeight + 10;
+        
+        particle.css({
+            left: startX + 'px',
+            top: startY + 'px'
+        });
+        
+        $('.particles').append(particle);
+        
+        particle.animate({
+            top: -10
+        }, 8000, 'linear', function() {
+            particle.remove();
+        });
+    }
+
+    // Generate particles periodically
+    setInterval(createParticle, 3000);
+
     console.log('Portfolio website loaded successfully! 🚀');
 });
 
